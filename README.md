@@ -1,17 +1,17 @@
 # Expense Tracker API
 
-API REST para gerenciamento de despesas pessoais, com autenticação de usuários via JWT. Projeto baseado no desafio [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) do roadmap.sh.
+REST API for managing personal expenses, with user authentication via JWT. Based on the [Expense Tracker API](https://roadmap.sh/projects/expense-tracker-api) project from roadmap.sh.
 
-## Tecnologias
+## Tech Stack
 
 - Python
 - FastAPI
 - SQLAlchemy (ORM)
 - SQLite
 - python-jose (JWT)
-- passlib / bcrypt (hash de senha)
+- passlib / bcrypt (password hashing)
 
-## Estrutura de arquivos
+## Project Structure
 
 ```
 expense-tracker-api/
@@ -25,24 +25,24 @@ expense-tracker-api/
     └── expenses_router.py
 ```
 
-## Funcionalidades
+## Features
 
-- Registro e login de usuário com JWT
-- CRUD de despesas protegido por autenticação
-- Cada usuário só acessa suas próprias despesas
-- Autorização por dono do item: retorna `403` ao tentar alterar ou excluir despesa de outro usuário
-- Categorias de despesa via Enum fixo: `Groceries`, `Leisure`, `Electronics`, `Utilities`, `Clothing`, `Health`, `Others`
-- Filtros na listagem:
-  - por período: `week`, `month`, `3months`
-  - por intervalo customizado: `start_date` / `end_date`
+- User registration and login with JWT
+- Expense CRUD protected by authentication
+- Each user can only access their own expenses
+- Ownership-based authorization: returns `403` when trying to update or delete another user's expense
+- Expense categories via a fixed Enum: `Groceries`, `Leisure`, `Electronics`, `Utilities`, `Clothing`, `Health`, `Others`
+- List filters:
+  - by period: `week`, `month`, `3months`
+  - by custom range: `start_date` / `end_date`
 
-## Pré-requisitos
+## Prerequisites
 
 - Python 3.x
 
-## Como rodar
+## Getting Started
 
-1. Crie e ative um ambiente virtual:
+1. Create and activate a virtual environment:
 
    **Windows**
    ```bash
@@ -56,48 +56,48 @@ expense-tracker-api/
    source venv/bin/activate
    ```
 
-2. Instale as dependências:
+2. Install the dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Crie um arquivo `.env` na raiz do projeto com a variável `SECRET_KEY`:
+3. Create a `.env` file in the project root with the `SECRET_KEY` variable:
    ```
-   SECRET_KEY=sua_chave_secreta_aqui
+   SECRET_KEY=your_secret_key_here
    ```
 
-4. Inicie o servidor:
+4. Start the server:
    ```bash
    uvicorn main:app --reload
    ```
 
-5. Acesse a documentação interativa em http://127.0.0.1:8000/docs
+5. Open the interactive docs at http://127.0.0.1:8000/docs
 
-O banco SQLite (`expenses.db`) é criado automaticamente na primeira execução, pois o `main.py` chama `Base.metadata.create_all`.
+The SQLite database (`expenses.db`) is created automatically on first run, since `main.py` calls `Base.metadata.create_all`.
 
-## Variáveis de ambiente
+## Environment Variables
 
-| Variável     | Descrição                          |
-|--------------|------------------------------------|
-| `SECRET_KEY` | Chave usada para assinar os tokens JWT |
+| Variable     | Description                          |
+|--------------|--------------------------------------|
+| `SECRET_KEY` | Key used to sign JWT tokens          |
 
 ## Endpoints
 
-| Método | Rota                     | Descrição                         |
-|--------|--------------------------|-----------------------------------|
-| POST   | `/auth/register`         | Registra um novo usuário          |
-| POST   | `/auth/login`            | Autentica o usuário e retorna o token JWT |
-| POST   | `/expenses/create`       | Cria uma despesa                  |
-| GET    | `/expenses/list`         | Lista as despesas do usuário      |
-| PUT    | `/expenses/update/{id}`  | Atualiza uma despesa              |
-| DELETE | `/expenses/delete/{id}`  | Exclui uma despesa                |
+| Method | Route                    | Description                              |
+|--------|--------------------------|------------------------------------------|
+| POST   | `/auth/register`         | Register a new user                      |
+| POST   | `/auth/login`            | Authenticate the user and return a JWT   |
+| POST   | `/expenses/create`       | Create an expense                        |
+| GET    | `/expenses/list`         | List the user's expenses                 |
+| PUT    | `/expenses/update/{id}`  | Update an expense                        |
+| DELETE | `/expenses/delete/{id}`  | Delete an expense                        |
 
-As rotas de `/expenses` exigem autenticação (token JWT).
+All `/expenses` routes require authentication (JWT token).
 
-### Query params de `GET /expenses/list`
+### Query params for `GET /expenses/list`
 
-| Parâmetro    | Descrição                                      |
-|--------------|------------------------------------------------|
-| `period`     | `week`, `month` ou `3months`                   |
-| `start_date` | Data inicial (`YYYY-MM-DD`)                    |
-| `end_date`   | Data final (`YYYY-MM-DD`)                      |
+| Parameter    | Description                        |
+|--------------|------------------------------------|
+| `period`     | `week`, `month` or `3months`       |
+| `start_date` | Start date (`YYYY-MM-DD`)          |
+| `end_date`   | End date (`YYYY-MM-DD`)            |
