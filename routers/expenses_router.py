@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from schemas import ExpenseCreate, ExpenseOut, ExpenseUpdate
+from schemas import ExpenseCreate, ExpenseOut, ExpenseUpdate, ExpensePeriod
 from models import Expense, User
 from database import get_db
 from auth import get_current_user
-from datetime import date
+from datetime import date, timedelta
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
 
@@ -26,11 +26,20 @@ def create_expense(expense: ExpenseCreate, db: Session = Depends(get_db), curren
 
 @router.get("/list", response_model=list[ExpenseOut])
 def list_expenses(
+    period: ExpensePeriod | None = None,
     start_date: date | None = None,
     end_date: date | None = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),    
 ):
+    if period:
+        if period == ExpensePeriod.WEEK:
+            start_date = date.today() - timedelta(days=7)
+        elif period == ExpensePeriod.MONTH:
+            start_date = date.today() - timedelta(days=30)
+        elif period == ExpensePeriod.THREE_MONTHS:
+            start_date = date.today() - timedelta(days=90)
+
     query = db.query(Expense).filter(Expense.user_id == current_user.id)
     
     if start_date:

@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from models import ExpenseCategory
-import datetime 
+import datetime
+import enum 
 
 class UserCreate(BaseModel):
     username: str
