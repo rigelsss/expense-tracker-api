@@ -41,3 +41,9 @@ class Token(BaseModel):
 class UserLogin(BaseModel):
     username: str
     password: str
+    
+class ExpensePeriod(str, enum.Enum):
+    WEEK = "week"
+    MONTH = "month"
+    THREE_MONTHS = "3months"
+    
